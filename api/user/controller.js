@@ -57,13 +57,13 @@ exports.user_login = (req,res,next)=>{
             if(user.length<1)
             {
                 return res.status(401).json({
-                    Message: 'Auth Failed'
+                    message: 'No User Found'
                 });
             }
             bcrypt.compare(req.body.password, user[0].password,(err,result)=>{
                 if(err){
                     return res.status(401).json({
-                        Message: 'Auth Failed'
+                        message: 'Pass Failed'
                     });
                 }
                 if(result){
@@ -80,7 +80,7 @@ exports.user_login = (req,res,next)=>{
                     });
                 }
                 res.status(401).json({
-                    Message: 'Auth Failed'
+                    message: 'Auth Failed'
                 });
             });
         })
