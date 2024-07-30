@@ -9,8 +9,9 @@ const connectDB = require("./api/dbModel/dbConfig");
 
 connectDB();
 
-const dbController = require("./api/dbModel/dbController")
-const userRoutes = require('./api/user/route')
+const dbController = require("./api/dbModel/dbController");
+const userRoutes = require('./api/user/route');
+const customerRoutes = require('./api/customer/route');
 
 
 //logging requests
@@ -48,6 +49,7 @@ app.get("/getInvoiceByNumber",dbController.getInvoiceByNumber);
 
 
 app.use("/auth",userRoutes);
+app.use('/customer',customerRoutes);
 
 //Route Error Handling
 app.use((req,res,next)=>{
