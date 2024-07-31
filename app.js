@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config()
 const connectDB = require("./api/dbModel/dbConfig");
+const jwt = require('jsonwebtoken');
 
 connectDB();
 
@@ -38,6 +39,26 @@ app.use((req,res,next)=>{
     next();
 });
 
+//middleware
+const verifyToken = (req, res, next) => {
+    const token = req.headers['authorization'];
+  
+    if (!token) {
+      return res.status(403).json({ message: 'No token provided!' });
+    }
+  
+    const tokenWithoutBearer = token.split(' ')[1];
+  
+    jwt.verify(tokenWithoutBearer, process.env.JWT_KEY, (err, decoded) => {
+      if (err) {
+        return res.status(401).json({ message: 'Unauthorized!' });
+      }
+      req.userId = decoded.id;
+      next();
+    });
+  };
+
+
 
 //Routes Middleware
 app.post("/signup",dbController.signup);
@@ -49,7 +70,7 @@ app.get("/getInvoiceByNumber",dbController.getInvoiceByNumber);
 
 
 app.use("/auth",userRoutes);
-app.use('/customer',customerRoutes);
+app.use('/customer',verifyToken,customerRoutes);
 
 //Route Error Handling
 app.use((req,res,next)=>{
