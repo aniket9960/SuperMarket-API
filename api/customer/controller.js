@@ -5,6 +5,7 @@ exports.createCustomer = (req, res, next) => {
     const body = req.body;
     const customer = new Customer({
         id: new mongoose.Types.ObjectId(),
+        user_id : req.params.user_id,
         name: body.name,
         mobile: body.mobile,
         email: body.email,
@@ -26,7 +27,7 @@ exports.createCustomer = (req, res, next) => {
 };
 
 exports.getAllCustomer = (req, res, next) => {
-    Customer.find()
+    Customer.find({user_id: req.params.user_id})
         .exec()
         .then((docs) => {
             const response = {
@@ -34,6 +35,7 @@ exports.getAllCustomer = (req, res, next) => {
                 customers: docs.map(doc => {
                     return {
                         id: doc.id,
+                        user_id: doc.user_id,
                         name: doc.name,
                         mobile: doc.mobile,
                         email: doc.email,
