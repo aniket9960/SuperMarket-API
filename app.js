@@ -13,6 +13,7 @@ connectDB();
 const dbController = require("./api/dbModel/dbController");
 const userRoutes = require('./api/user/route');
 const customerRoutes = require('./api/customer/route');
+const productRoutes = require('./api/product/route');
 
 
 //logging requests
@@ -63,7 +64,7 @@ const verifyToken = (req, res, next) => {
 //Routes Middleware
 app.post("/signup",dbController.signup);
 app.post("/icreate",dbController.icreate);
-app.post("/product",dbController.product);
+//app.post("/product",dbController.product);
 app.get("/getProduct",dbController.getProduct);
 app.get("/getAllProducts",dbController.getAllProducts);
 app.get("/getInvoiceByNumber",dbController.getInvoiceByNumber);
@@ -71,6 +72,7 @@ app.get("/getInvoiceByNumber",dbController.getInvoiceByNumber);
 
 app.use("/auth",userRoutes);
 app.use('/customer',verifyToken,customerRoutes);
+app.use('/product',productRoutes);
 
 //Route Error Handling
 app.use((req,res,next)=>{

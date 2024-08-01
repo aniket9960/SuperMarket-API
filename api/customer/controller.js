@@ -4,7 +4,8 @@ const Customer = require('./Model');
 const crypto = require('crypto');
 
 function createCustomId(Data) {
-    return crypto.createHash('sha256').update(Data.name + Data.email + Data.storeName).digest('hex');
+    const currentTimeMillis = Date.now();
+    return crypto.createHash('sha256').update(Data.name + Data.email + Data.storeName + currentTimeMillis).digest('hex');
 }
 
 

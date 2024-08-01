@@ -6,7 +6,8 @@ const crypto = require('crypto');
 const User = require('./Model');
 
 function createCustomId(storeData) {
-    return crypto.createHash('sha256').update(storeData.name + storeData.email + storeData.storeName).digest('hex');
+    const currentTimeMillis = Date.now();
+    return crypto.createHash('sha256').update(storeData.name + storeData.email + storeData.storeName + currentTimeMillis).digest('hex');
 }
 
 exports.createUser = (req, res, next) => {
