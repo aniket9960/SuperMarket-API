@@ -1,11 +1,17 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
 const User = require('./Model');
 
+function createCustomId(storeData) {
+    return crypto.createHash('sha256').update(storeData.name + storeData.email + storeData.storeName).digest('hex');
+}
+
 exports.createUser = (req, res, next) => {
     const body = req.body;
+    const customId = createCustomId({name:body.name, email: body.email, storeName: body.storeName});
     User.find({ email: req.body.email })
         .exec()
         .then(user => {
@@ -21,7 +27,7 @@ exports.createUser = (req, res, next) => {
                         });
                     } else {
                         const user = new User({
-                            id: new mongoose.Types.ObjectId(),
+                            id: customId,
                             name: body.name ,
                             mobile: body.mobile,
                             email: body.email,

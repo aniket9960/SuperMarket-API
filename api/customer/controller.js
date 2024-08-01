@@ -1,10 +1,18 @@
 const mongoose = require('mongoose');
 const Customer = require('./Model');
 
+const crypto = require('crypto');
+
+function createCustomId(Data) {
+    return crypto.createHash('sha256').update(Data.name + Data.email + Data.storeName).digest('hex');
+}
+
+
 exports.createCustomer = (req, res, next) => {
     const body = req.body;
+    const customId = createCustomId({name:body.name, email: body.email, storeName: body.storeName});
     const customer = new Customer({
-        id: new mongoose.Types.ObjectId(),
+        id: customId,
         user_id : req.params.user_id,
         name: body.name,
         mobile: body.mobile,
